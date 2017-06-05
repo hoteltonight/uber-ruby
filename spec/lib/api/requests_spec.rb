@@ -7,7 +7,7 @@ describe Uber::API::Requests do
   describe '#trip_estimate' do
     context 'with a valid response' do
       before do
-        stub_uber_request(:post, "v1/requests/estimate",
+        stub_uber_request(:post, "v1.2/requests/estimate",
                           # From: https://developer.uber.com/docs/v1-requests-estimate
                           {
                             "price" => {
@@ -54,7 +54,7 @@ describe Uber::API::Requests do
   describe '#trip_request' do
     context 'with a valid response' do
       before do
-        stub_uber_request(:post, "v1/requests",
+        stub_uber_request(:post, "v1.2/requests",
                           # From: https://developer.uber.com/v1/endpoints/#request
                           {
                             "status" => "accepted",
@@ -109,7 +109,7 @@ describe Uber::API::Requests do
         let!(:sandbox_client) { setup_client(sandbox: true) }
 
         before do
-          stub_uber_request(:post, "v1/requests",
+          stub_uber_request(:post, "v1.2/requests",
                             # From: https://developer.uber.com/v1/endpoints/#request
                             {
                               "status" => "accepted",
@@ -165,7 +165,7 @@ describe Uber::API::Requests do
 
     context 'with a "processing" response' do
       before do
-        stub_uber_request(:post, "v1/requests",
+        stub_uber_request(:post, "v1.2/requests",
                           # From: https://developer.uber.com/v1/endpoints/#request
                           {
                             :status => "processing",
@@ -195,7 +195,7 @@ describe Uber::API::Requests do
 
     context 'with a 409 conflict with surge response' do
       before do
-        stub_uber_request(:post, "v1/requests",
+        stub_uber_request(:post, "v1.2/requests",
                           # From: https://developer.uber.com/v1/endpoints/#request
                           {
                             "meta" => {
@@ -232,7 +232,7 @@ describe Uber::API::Requests do
 
   describe '#trip_details' do
     before do
-      stub_uber_request(:get, "v1/requests/deadbeef",
+      stub_uber_request(:get, "v1.2/requests/deadbeef",
                         # From: https://developer.uber.com/v1/endpoints/#request-details
                         {
                           "status" => "accepted",
@@ -303,7 +303,7 @@ describe Uber::API::Requests do
 
   describe '#trip_map' do
     before do
-      stub_uber_request(:get, "v1/requests/deadbeef/map",
+      stub_uber_request(:get, "v1.2/requests/deadbeef/map",
                         # From: https://developer.uber.com/v1/endpoints/#request-map
                         {
                           "request_id" => "b5512127-a134-4bf4-b1ba-fe9f48f56d9d",
@@ -322,7 +322,7 @@ describe Uber::API::Requests do
     let!(:sandbox_client) { setup_client(sandbox: true) }
 
     before do
-      stub_uber_request(:put, "v1/sandbox/requests/deadbeef",
+      stub_uber_request(:put, "v1.2/sandbox/requests/deadbeef",
                         # From: https://developer.uber.com/v1/sandbox/
                         nil,
                         body: {status: 'accepted'}.to_json,
@@ -340,7 +340,7 @@ describe Uber::API::Requests do
     let!(:sandbox_client) { setup_client(sandbox: true) }
 
     before do
-      stub_uber_request(:delete, "v1/requests/deadbeef",
+      stub_uber_request(:delete, "v1.2/requests/deadbeef",
                         # From: https://developer.uber.com/docs/v1-requests-cancel
                         nil,
                         body: {},
