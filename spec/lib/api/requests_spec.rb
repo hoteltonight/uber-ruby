@@ -249,14 +249,20 @@ describe Uber::API::Requests do
                             "bearing" => 33
                           },
                           "pickup" => {
+                            "address" => "742 Evergreen Terrace",
+                            "alias" => "home",
+                            "eta" => 5,
                             "latitude" => 0.0,
                             "longitude" => 0.5,
-                            "eta" => 5
+                            "name" => "742 Evergreen",
                           },
                           "destination" => {
+                            "address" => "123 Fake Street",
+                            "alias" => "work",
+                            "eta" => 19,
                             "latitude" => 0.0,
                             "longitude" => 0.6,
-                            "eta" => 19
+                            "name" => "123 Fake",
                           },
                           "vehicle" => {
                             "make" => "Bugatti",
@@ -286,13 +292,19 @@ describe Uber::API::Requests do
       expect(request.location.longitude).to eql -122.418143
       expect(request.location.bearing).to eql 33
 
+      expect(request.pickup.address).to eql "742 Evergreen Terrace"
+      expect(request.pickup.alias).to eql "home"
+      expect(request.pickup.eta).to eql 5
       expect(request.pickup.latitude).to eql 0.0
       expect(request.pickup.longitude).to eql 0.5
-      expect(request.pickup.eta).to eql 5
+      expect(request.pickup.name).to eql "742 Evergreen"
 
+      expect(request.destination.address).to eql "123 Fake Street"
+      expect(request.destination.alias).to eql "work"
+      expect(request.destination.eta).to eql 19
       expect(request.destination.latitude).to eql 0.0
       expect(request.destination.longitude).to eql 0.6
-      expect(request.destination.eta).to eql 19
+      expect(request.destination.name).to eql "123 Fake"
 
       expect(request.vehicle.make).to eql 'Bugatti'
       expect(request.vehicle.model).to eql 'Veyron'
