@@ -182,6 +182,22 @@ end
 client.trip_cancel 'request_id'
 ```
 
+### Generate ride receipt
+Generates the receipt for a completed request.
+
+```ruby
+client = Uber::Client.new do |config|
+  config.client_id     = "YOUR_CLIENT_ID"
+  config.client_secret = "YOUR_CLIENT_SECRET"
+  config.bearer_token  = "USER_ACCESS_TOKEN"
+end
+
+client.trip_receipt 'request_id' #=> Generates Uber::Receipt
+# or
+receipt = client.ride_receipt 'request_id'
+receipt.total_charged #=> "$5.92"
+```
+
 ### Retrieve addresses
 Retrieves address information of _home_ or _work_.
 
@@ -192,8 +208,8 @@ client = Uber::Client.new do |config|
   config.bearer_token  = "USER_ACCESS_TOKEN"
 end
 
-place = client.places 'home'
-place.address #=> retuns fully qualified address of location
+place = client.place 'home'
+place.address #=> returns fully qualified address of location
 ```
 
 ### Update addresses

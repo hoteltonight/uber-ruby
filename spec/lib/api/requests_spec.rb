@@ -250,11 +250,13 @@ describe Uber::API::Requests do
                           },
                           "pickup" => {
                             "latitude" => 0.0,
-                            "longitude" => 0.5
+                            "longitude" => 0.5,
+                            "eta" => 5
                           },
                           "destination" => {
                             "latitude" => 0.0,
-                            "longitude" => 0.6
+                            "longitude" => 0.6,
+                            "eta" => 19
                           },
                           "vehicle" => {
                             "make" => "Bugatti",
@@ -286,9 +288,11 @@ describe Uber::API::Requests do
 
       expect(request.pickup.latitude).to eql 0.0
       expect(request.pickup.longitude).to eql 0.5
+      expect(request.pickup.eta).to eql 5
 
       expect(request.destination.latitude).to eql 0.0
       expect(request.destination.longitude).to eql 0.6
+      expect(request.destination.eta).to eql 19
 
       expect(request.vehicle.make).to eql 'Bugatti'
       expect(request.vehicle.model).to eql 'Veyron'
@@ -347,6 +351,41 @@ describe Uber::API::Requests do
     it 'should cancel the request in the sandbox' do
       request = sandbox_client.trip_cancel('deadbeef')
       expect(request.class).to eql Uber::Request
+    end
+  end
+
+  describe '#trip_receipt' do
+    before do
+      stub_uber_request(:get, "v1.2/requests/b5512127-a134-4bf4-b1ba-fe9f48f56d9d/receipt",
+                        # From: https://developer.uber.com/docs/riders/references/api/v1.2/requests-request_id-receipt-get
+                        {
+                            "request_id" => "b5512127-a134-4bf4-b1ba-fe9f48f56d9d",
+                            "subtotal" => "$12.78",
+                            "total_charged" => "$5.92",
+                            "total_owed" => nil,
+                            "total_fare" => "$5.92",
+                            "currency_code" =>  "USD",
+                            "duration" => "00:11:35",
+                            "distance" => "1.49",
+                            "distance_label" => "miles"
+                        },
+                        status_code: 200)
+    end
+
+    it 'should retrieve the ride receipt' do
+      receipt = client.trip_receipt('b5512127-a134-4bf4-b1ba-fe9f48f56d9d')
+      ride_receipt = client.ride_receipt('b5512127-a134-4bf4-b1ba-fe9f48f56d9d')
+      expect(receipt.class).to eql Uber::Receipt
+      expect(ride_receipt.class).to eql Uber::Receipt
+      expect(receipt.subtotal).to eql "$12.78"
+      expect(receipt.total_charged).to eql "$5.92"
+      expect(receipt.total_owed).to be_nil
+      expect(receipt.total_fare).to eql "$5.92"
+      expect(receipt.currency_code).to eql "USD"
+      expect(receipt.duration).to eql "00:11:35"
+      expect(receipt.distance).to eql 1.49
+      expect(receipt.distance_label).to eql "miles"
+
     end
   end
 
